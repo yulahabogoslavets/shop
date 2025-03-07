@@ -22,7 +22,7 @@
 	}
 </script>
 
-<div class="mb-4">
+<div class="my-4">
 	<h4 class="mb-2 text-sm font-medium">Price Filter</h4>
 
 	<div class="flex items-center gap-2">
@@ -51,7 +51,7 @@
 	</div>
 
 	<!-- Range sliders -->
-	<div class="relative mt-4 w-full">
+	<div class="relative my-6 w-full">
 		<div class="absolute h-1 w-full rounded-sm bg-gray-300"></div>
 		<div
 			class="absolute h-1 w-full rounded-sm bg-sky-700"
@@ -66,7 +66,7 @@
 			step="10"
 			bind:value={minPrice}
 			oninput={handlePriceChange}
-			class="w-full"
+			aria-label="Minimum Price"
 		/>
 		<input
 			type="range"
@@ -75,7 +75,7 @@
 			step="10"
 			bind:value={maxPrice}
 			oninput={handlePriceChange}
-			class="w-full"
+			aria-label="Maximum Price"
 		/>
 	</div>
 </div>
@@ -84,7 +84,7 @@
 	input[type='range'] {
 		position: absolute;
 		width: 100%;
-		height: 6px;
+		height: 8px;
 		background: none;
 		pointer-events: none;
 		-webkit-appearance: none;
@@ -93,8 +93,8 @@
 	input[type='range']::-webkit-slider-thumb,
 	input[type='range']::-moz-range-thumb {
 		-webkit-appearance: none;
-		width: 16px;
-		height: 16px;
+		width: 24px;
+		height: 24px;
 		background: blue;
 		border-radius: 50%;
 		cursor: pointer;

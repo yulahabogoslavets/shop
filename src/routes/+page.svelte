@@ -9,6 +9,7 @@
 	import SkeletonItem from './components/SkeletonItem.svelte';
 	import Icon from '@iconify/svelte';
 	import FocusTrap from '$lib/FocusTrap.svelte';
+	import ScrollToTopButton from './components/ScrollToTopButton.svelte';
 
 	let { data } = $props();
 
@@ -135,6 +136,7 @@
 			{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 			aria-modal="true"
 			role="dialog"
+			aria-label="Filter Products"
 		>
 			<!-- Close button for mobile -->
 			<button
@@ -163,7 +165,7 @@
 
 			<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
 
-			<div class="flex flex-col gap-2 lg:hidden">
+			<div class="flex flex-col gap-2 py-4 lg:hidden">
 				<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
 			</div>
 		</aside>
@@ -212,7 +214,7 @@
 						</a>
 						<div class="flex flex-col items-center gap-4 p-4">
 							<h2
-								class="hyphens-auto bg-gradient-to-r from-orange-600 to-sky-700 bg-clip-text text-lg font-medium text-gray-600 text-transparent"
+								class="hyphens-auto bg-gradient-to-r from-orange-600 to-sky-700 bg-clip-text text-center text-lg font-medium text-gray-600 text-transparent"
 							>
 								{product.title}
 							</h2>
@@ -230,6 +232,7 @@
 		<!-- Load More Component -->
 		{#if filteredItems.length > 5}
 			<LoadMore {loading} {allItemsLoaded} loadMore={loadMoreItems} />
+			<ScrollToTopButton />
 		{/if}
 		{#if filteredItems.length === 0}
 			<p class="text-center text-gray-500">No products found.</p>
