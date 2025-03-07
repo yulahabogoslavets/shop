@@ -6,7 +6,8 @@
 	import StarRating from './components/StarRating.svelte';
 	import { searchTerm } from '$lib/store/search';
 	import ButtonAddToCart from './components/ButtonAddToCart.svelte';
-	import LoadMore from './components/LoadMore.svelte'; // Import the LoadMore component
+	import LoadMore from './components/LoadMore.svelte';
+	import SkeletonItem from './components/SkeletonItem.svelte';
 
 	let { data } = $props();
 
@@ -93,7 +94,7 @@
 				visibleItemsCount += 5;
 			}
 			loading = false;
-		}, 1000);
+		}, 500);
 	}
 </script>
 
@@ -128,28 +129,38 @@
 
 			<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
 		</div>
+
 		<div class="grid grid-cols-2 gap-6" aria-live="polite">
-			{#each filteredItems.slice(0, visibleItemsCount) as product}
-				<div class="overflow-hidden rounded-xl bg-white shadow-lg">
-					<a
-						href="/products/{product.id}"
-						title="Show '{product.title}' details"
-						aria-label="Show '{product.title}' details"
-					>
-						<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
-					</a>
-					<div class="p-4">
-						<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
-							{product.title}
-						</h2>
-						<span><StarRating rating={product.rating} /> {product.rating} </span>
-						<div class="flex items-center justify-between gap-4">
-							<span class="text-xl font-bold">${product.price}</span>
-							<ButtonAddToCart {product} />
+			{#if loading}
+				<SkeletonItem count={visibleItemsCount} variant="list" />
+			{:else}
+				{#each filteredItems.slice(0, visibleItemsCount) as product}
+					<div class="overflow-hidden rounded-xl bg-white shadow-lg">
+						<a
+							href="/products/{product.id}"
+							title="Show '{product.title}' details"
+							aria-label="Show '{product.title}' details"
+						>
+							<img
+								src={product.thumbnail}
+								alt={product.title}
+								class="h-48 w-full object-cover"
+								loading="lazy"
+							/>
+						</a>
+						<div class="p-4">
+							<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
+								{product.title}
+							</h2>
+							<span><StarRating rating={product.rating} /> {product.rating} </span>
+							<div class="flex items-center justify-between gap-4">
+								<span class="text-xl font-bold">${product.price}</span>
+								<ButtonAddToCart {product} />
+							</div>
 						</div>
 					</div>
-				</div>
-			{/each}
+				{/each}
+			{/if}
 		</div>
 
 		<!-- Load More Component -->
