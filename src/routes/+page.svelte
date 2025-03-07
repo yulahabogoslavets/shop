@@ -23,6 +23,14 @@
 			});
 		}
 	}
+
+	let searchTerm: string = $state('');
+
+	let filteredItems = $derived.by(() => {
+		return data.products.filter((item) =>
+			item.title.toLowerCase().includes(searchTerm.toLowerCase())
+		);
+	});
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -30,7 +38,13 @@
 
 	<div class="ml-auto">
 		<label for="search" class="hidden"> Search </label>
-		<input type="search" id="search" placeholder="Search" class="rounded p-1" />
+		<input
+			type="search"
+			id="search"
+			placeholder="Search"
+			class="rounded p-1"
+			bind:value={searchTerm}
+		/>
 	</div>
 
 	<div class="relative ml-auto flex items-center">
@@ -42,7 +56,7 @@
 	<aside>Filter</aside>
 
 	<div class="grid grid-cols-2 gap-6">
-		{#each data.products as product}
+		{#each filteredItems as product}
 			<div class="overflow-hidden rounded-xl bg-white shadow-lg">
 				<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
 				<div class="p-4">
