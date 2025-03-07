@@ -3,6 +3,7 @@
 	import Cart from './components/cart/cart.svelte';
 	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
 	import PriceFilter from './components/filter/PriceFilter.svelte';
+	import SortOptionFilter from './components/filter/SortOptionFilter.svelte';
 
 	let { data } = $props();
 
@@ -33,6 +34,7 @@
 	let minPrice: number = $state(0);
 	let maxPrice: number = $state(0);
 
+	let sortOption: 'price_asc' | 'price_desc' | 'rating_desc' | 'rating_asc' = $state('rating_desc');
 	// Calculate unique categories with counts
 	let categories = $derived.by(() => {
 		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
@@ -60,7 +62,7 @@
 
 	// Filter products by search term, selected categories, and selected brands
 	let filteredItems = $derived.by(() => {
-		return data.products.filter((item) => {
+		let filtered = data.products.filter((item) => {
 			const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
 			const matchesCategory =
 				selectedCategories.length === 0 || selectedCategories.includes(item.category);
@@ -69,7 +71,26 @@
 
 			return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
 		});
+
+		// Sort products based on the selected sort option
+		if (sortOption === 'price_asc') {
+			filtered = filtered.sort((a, b) => a.price - b.price); // Price Ascending
+		} else if (sortOption === 'price_desc') {
+			filtered = filtered.sort((a, b) => b.price - a.price); // Price Descending
+		} else if (sortOption === 'rating_desc') {
+			filtered = filtered.sort((a, b) => b.rating - a.rating); // Most Liked (Rating Descending)
+		} else if (sortOption === 'rating_asc') {
+			filtered = filtered.sort((a, b) => a.rating - b.rating); // Least Liked (Rating Ascending)
+		}
+
+		return filtered;
 	});
+
+	function handleSortChange(
+		newSortOption: 'price_asc' | 'price_desc' | 'rating_desc' | 'rating_asc'
+	) {
+		sortOption = newSortOption;
+	}
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -114,23 +135,33 @@
 		<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
 	</aside>
 
-	<div class="grid grid-cols-2 gap-6">
-		{#each filteredItems as product}
-			<div class="overflow-hidden rounded-xl bg-white shadow-lg">
-				<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
-				<div class="p-4">
-					<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
-						{product.title}
-					</h2>
-					<div class="flex items-center justify-between gap-4">
-						<span class="text-xl font-bold">${product.price}</span>
-						<button
-							class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
-							onclick={() => addToCart(product)}>Add to cart</button
-						>
+	<section class="w-3/4">
+		<div class="mb-4 flex items-center justify-between">
+			<span role="status">
+				{filteredItems.length} products
+			</span>
+
+			<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
+		</div>
+		<div class="grid grid-cols-2 gap-6" aria-live="polite">
+			{#each filteredItems as product}
+				<div class="overflow-hidden rounded-xl bg-white shadow-lg">
+					<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
+					<div class="p-4">
+						<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
+							{product.title}
+						</h2>
+						<span>{product.rating}</span>
+						<div class="flex items-center justify-between gap-4">
+							<span class="text-xl font-bold">${product.price}</span>
+							<button
+								class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
+								onclick={() => addToCart(product)}>Add to cart</button
+							>
+						</div>
 					</div>
 				</div>
-			</div>
-		{/each}
-	</div>
+			{/each}
+		</div>
+	</section>
 </main>
