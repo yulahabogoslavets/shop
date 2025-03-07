@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/types';
+	import Cart from './cart.svelte';
 
 	let { data } = $props();
 
-	console.log('data', data);
+	let cartProductsMain = $state<CartProduct[]>([]);
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -15,9 +16,7 @@
 	</div>
 
 	<div class="relative ml-auto flex items-center">
-		<button class="flex items-center rounded-full bg-sky-600 px-4 py-2 text-white hover:bg-sky-700">
-			<span>Cart</span>
-		</button>
+		<Cart bind:cartProducts={cartProductsMain} />
 	</div>
 </header>
 
@@ -36,7 +35,13 @@
 						<span class="text-xl font-bold">${product.price}</span>
 						<button
 							class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
-							>Add to cart</button
+							onclick={() => {
+								cartProductsMain.push({
+									id: crypto.randomUUID(),
+									quantity: 1,
+									product: product
+								});
+							}}>Add to cart</button
 						>
 					</div>
 				</div>
