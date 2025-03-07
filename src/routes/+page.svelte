@@ -211,7 +211,9 @@
 							/>
 						</a>
 						<div class="flex flex-col items-center gap-4 p-4">
-							<h2 class="hyphens-auto text-lg font-medium text-gray-600">
+							<h2
+								class="hyphens-auto bg-gradient-to-r from-orange-600 to-sky-700 bg-clip-text text-lg font-medium text-gray-600 text-transparent"
+							>
 								{product.title}
 							</h2>
 							<span><StarRating rating={product.rating} /> {product.rating} </span>
