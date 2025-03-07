@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import type { Product } from '$lib/types';
 	import StarRating from '../../components/StarRating.svelte';
+	import Lightbox from '../../components/Lightbox.svelte';
 
 	let idProduct = page.params.id;
 	let product: any = $state<Product[]>([]);
@@ -22,9 +23,7 @@
 		<p>Loading...</p>
 	{:else if product}
 		<section class="flex justify-between gap-4">
-			<div>
-				<img src={product.thumbnail} alt={product.title} />
-			</div>
+			<Lightbox src={product.thumbnail} alt={product.title} />
 			<div>
 				<h1 class="text-3xl font-semibold">{product.title}</h1>
 				<p>
