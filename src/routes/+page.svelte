@@ -25,11 +25,18 @@
 	}
 
 	let searchTerm: string = $state('');
+	let selectedCategory: string = $state('');
+
+	let categories = $derived.by(() => {
+		return Array.from(new Set(data.products.map((item) => item.category)));
+	});
 
 	let filteredItems = $derived.by(() => {
-		return data.products.filter((item) =>
-			item.title.toLowerCase().includes(searchTerm.toLowerCase())
-		);
+		return data.products.filter((item) => {
+			const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+			const matchesCategory = selectedCategory ? item.category === selectedCategory : true; // Show all if no category selected
+			return matchesSearch && matchesCategory;
+		});
 	});
 </script>
 
@@ -53,7 +60,15 @@
 </header>
 
 <main class="container mx-auto flex justify-between bg-gray-100 px-4 py-10">
-	<aside>Filter</aside>
+	<aside class="w-1/4">
+		<h3 class="mb-2 text-lg font-medium">Filter by Category</h3>
+		<select bind:value={selectedCategory} class="w-full rounded border border-gray-300 p-2">
+			<option value="">All Categories</option>
+			{#each categories as category}
+				<option value={category}>{category}</option>
+			{/each}
+		</select>
+	</aside>
 
 	<div class="grid grid-cols-2 gap-6">
 		{#each filteredItems as product}
