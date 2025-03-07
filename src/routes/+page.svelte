@@ -6,6 +6,7 @@
 	import StarRating from './components/StarRating.svelte';
 	import { searchTerm } from '$lib/store/search';
 	import ButtonAddToCart from './components/ButtonAddToCart.svelte';
+	import LoadMore from './components/LoadMore.svelte'; // Import the LoadMore component
 
 	let { data } = $props();
 
@@ -18,6 +19,7 @@
 	let visibleItemsCount = $state(10);
 	let loading = $state(false);
 	let allItemsLoaded = $state(false);
+
 	let categories = $derived.by(() => {
 		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
 			acc[product.category] = (acc[product.category] || 0) + 1;
@@ -93,30 +95,6 @@
 			loading = false;
 		}, 1000);
 	}
-
-	let observer: IntersectionObserver;
-
-	onMount(() => {
-		observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && !allItemsLoaded && !loading) {
-					loadMoreItems();
-				}
-			},
-			{ threshold: 1.0 }
-		);
-
-		const loadMoreElement = document.getElementById('load-more-trigger');
-		if (loadMoreElement) {
-			observer.observe(loadMoreElement);
-		}
-	});
-
-	onDestroy(() => {
-		if (observer) {
-			observer.disconnect();
-		}
-	});
 </script>
 
 <main class="container mx-auto flex justify-between gap-4 bg-gray-100 px-4 py-10">
@@ -174,28 +152,7 @@
 			{/each}
 		</div>
 
-		<!-- Load More Trigger Element -->
-		<div id="load-more-trigger" class="h-10"></div>
-
-		<!-- Loading Spinner (only visible while loading) -->
-		{#if loading}
-			<div class="my-4 text-center">
-				<svg
-					class="mx-auto h-8 w-8 animate-spin text-blue-500"
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-				>
-					<circle
-						class="opacity-25"
-						cx="12"
-						cy="12"
-						r="10"
-						stroke="currentColor"
-						stroke-width="4"
-					/>
-					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z" />
-				</svg>
-			</div>
-		{/if}
+		<!-- Load More Component -->
+		<LoadMore {loading} {allItemsLoaded} loadMore={loadMoreItems} />
 	</section>
 </main>
