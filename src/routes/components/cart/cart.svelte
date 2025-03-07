@@ -43,7 +43,7 @@
 
 <button
 	onclick={() => (cartOpen = !cartOpen)}
-	class="group flex items-center gap-2 rounded-lg bg-sky-600 p-2 py-2 text-white transition-all hover:bg-sky-700 hover:shadow-md focus:bg-sky-700 sm:px-4"
+	class="group flex items-center gap-2 rounded-lg bg-sky-700 p-2 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 sm:px-4"
 	title="Cart"
 	aria-label="Cart"
 >

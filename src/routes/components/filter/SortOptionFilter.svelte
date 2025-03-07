@@ -12,9 +12,10 @@
 </script>
 
 <div class="flex items-center gap-4">
-	<span>Sort by:</span>
+	<label for="sort-options">Sort by:</label>
 	<select
-		class="cursor-pointer rounded bg-sky-600 p-2 text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+		id="sort-options"
+		class="cursor-pointer rounded bg-sky-700 p-2 text-white hover:bg-sky-800 focus:bg-sky-800"
 		on:change={handleSortChange}
 		bind:value={sortOption}
 	>

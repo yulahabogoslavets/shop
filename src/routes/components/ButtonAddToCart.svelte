@@ -13,7 +13,7 @@
 </script>
 
 <button
-	class="w-full rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-gray-500 md:w-fit"
+	class="w-full rounded-full bg-sky-700 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-800 disabled:cursor-not-allowed disabled:bg-gray-500 md:w-fit"
 	onclick={() => addToCart(product)}
 	disabled={!product || quantityInCart >= product.stock}
 >

@@ -50,7 +50,10 @@
 	<!-- Show "Load More" button if not all items are loaded -->
 	{#if !allItemsLoaded && !loading}
 		<div class="text-center">
-			<button on:click={loadMore} class="rounded bg-blue-500 px-4 py-2 text-white">
+			<button
+				on:click={loadMore}
+				class="rounded bg-sky-700 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-800"
+			>
 				Load More
 			</button>
 		</div>

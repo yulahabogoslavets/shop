@@ -29,24 +29,30 @@
 	<h3 class="mb-2 text-lg font-medium">Price Filter</h3>
 
 	<div class="flex items-center gap-2">
+		<label for="min-price" class="sr-only">Minimum Price</label>
 		<input
 			type="number"
+			id="min-price"
 			bind:value={minPrice}
 			class="w-full rounded border p-2 text-sm"
 			min={minPrice}
 			step="10"
 			oninput={handlePriceChange}
+			aria-label="Minimum Price"
 		/>
 		<span>-</span>
 
+		<label for="max-price" class="sr-only">Maximum Price</label>
 		<input
 			type="number"
+			id="max-price"
 			bind:value={maxPrice}
 			class="w-full rounded border p-2 text-sm"
 			min={minPrice}
 			max={maxPrice}
 			step="10"
 			oninput={handlePriceChange}
+			aria-label="Maximum Price"
 		/>
 	</div>
 </div>
