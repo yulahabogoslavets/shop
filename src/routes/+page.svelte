@@ -196,7 +196,13 @@
 		<div class="grid grid-cols-2 gap-6" aria-live="polite">
 			{#each filteredItems as product}
 				<div class="overflow-hidden rounded-xl bg-white shadow-lg">
-					<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
+					<a
+						href="/products/{product.id}"
+						title="Show '{product.title}' details"
+						aria-label="Show '{product.title}' details"
+					>
+						<img src={product.thumbnail} alt={product.title} class="h-48 w-full object-cover" />
+					</a>
 					<div class="p-4">
 						<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
 							{product.title}
