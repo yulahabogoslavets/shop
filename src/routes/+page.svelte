@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
 	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
 	import PriceFilter from './components/filter/PriceFilter.svelte';
 	import SortOptionFilter from './components/filter/SortOptionFilter.svelte';
@@ -98,8 +97,10 @@
 	}
 </script>
 
-<main class="container mx-auto flex justify-between gap-4 bg-gray-100 px-4 py-10">
-	<aside class="sticky top-0 z-50 max-h-screen w-1/4 overflow-auto rounded p-4 shadow-md">
+<main class="container mx-auto flex justify-between gap-4 py-10">
+	<aside
+		class="sticky top-0 z-10 hidden max-h-screen w-1/4 overflow-auto rounded p-4 shadow-md lg:block"
+	>
 		<h3 class="mb-2 text-center text-lg font-medium">Filter</h3>
 		<!-- Category Filter -->
 		<MultiSelectFilter
@@ -121,16 +122,16 @@
 		<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
 	</aside>
 
-	<section class="w-3/4">
-		<div class="mb-4 flex items-center justify-between">
-			<span role="status">
-				{filteredItems.length} products
+	<section class="w-full md:w-3/4">
+		<div class="mb-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
+			<span>
+				<span class="font-semibold" role="status" aria-live="polite">{filteredItems.length}</span> products
 			</span>
 
 			<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
 		</div>
 
-		<div class="grid grid-cols-2 gap-6" aria-live="polite">
+		<div class="grid gap-6 px-4 sm:grid-cols-2" aria-live="polite">
 			{#if loading}
 				<SkeletonItem count={visibleItemsCount} variant="list" />
 			{:else}
@@ -140,20 +141,21 @@
 							href="/products/{product.id}"
 							title="Show '{product.title}' details"
 							aria-label="Show '{product.title}' details"
+							class="group shadow-sm"
 						>
 							<img
 								src={product.thumbnail}
 								alt={product.title}
-								class="h-48 w-full object-cover"
+								class="h-48 w-full object-cover transition-transform group-hover:scale-105"
 								loading="lazy"
 							/>
 						</a>
-						<div class="p-4">
-							<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
+						<div class="flex flex-col items-center gap-2 p-4">
+							<h2 class=" hyphens-auto text-lg font-medium text-gray-600 md:truncate">
 								{product.title}
 							</h2>
 							<span><StarRating rating={product.rating} /> {product.rating} </span>
-							<div class="flex items-center justify-between gap-4">
+							<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
 								<span class="text-xl font-bold">${product.price}</span>
 								<ButtonAddToCart {product} />
 							</div>
@@ -164,6 +166,11 @@
 		</div>
 
 		<!-- Load More Component -->
-		<LoadMore {loading} {allItemsLoaded} loadMore={loadMoreItems} />
+		{#if filteredItems.length > 5}
+			<LoadMore {loading} {allItemsLoaded} loadMore={loadMoreItems} />
+		{/if}
+		{#if filteredItems.length === 0}
+			<p class="text-center text-gray-500">No products found.</p>
+		{/if}
 	</section>
 </main>

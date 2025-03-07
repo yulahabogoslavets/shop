@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	export let src = '';
 	export let alt = '';
+	export let classImg = '';
 	let isOpen = false;
 
 	function openLightbox() {
@@ -28,7 +29,7 @@
 </script>
 
 <div
-	class="flex w-fit items-center justify-center overflow-hidden rounded-lg border border-gray-300"
+	class="flex w-fit items-center justify-center overflow-hidden rounded-lg border border-gray-300 {classImg}"
 >
 	<!-- Clickable Thumbnail -->
 	<button type="button" onclick={openLightbox} class="group">

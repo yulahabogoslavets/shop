@@ -2,6 +2,7 @@
 	import type { CartProduct } from '$lib/types';
 	import { onMount } from 'svelte';
 	import CartItem from './cart-item.svelte';
+	import Icon from '@iconify/svelte';
 
 	onMount(() => {
 		const savedCart = localStorage.getItem('cart');
@@ -42,12 +43,21 @@
 
 <button
 	onclick={() => (cartOpen = !cartOpen)}
-	class="flex items-center rounded-full bg-sky-600 px-4 py-2 text-white hover:bg-sky-700"
+	class="group flex items-center gap-2 rounded-lg bg-sky-600 p-2 py-2 text-white transition-all hover:bg-sky-700 hover:shadow-md focus:bg-sky-700 sm:px-4"
+	title="Cart"
+	aria-label="Cart"
 >
-	<span
-		>Cart {#if cartStats.quantity > 0}({cartStats.quantity}){/if}
+	<Icon
+		icon="mdi-light:cart"
+		width="24"
+		height="24"
+		class="transition-transform group-hover:scale-110"
+	/>
+	<span class="hidden sm:block">
+		Cart {#if cartStats.quantity > 0}({cartStats.quantity}){/if}
 	</span>
 </button>
+
 {#if cartOpen}
 	<div class="absolute right-0 top-8 z-10 mt-2 w-80 rounded-lg bg-white shadow-xl">
 		<div class="relative p-4">

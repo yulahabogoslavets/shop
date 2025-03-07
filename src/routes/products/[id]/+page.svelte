@@ -22,8 +22,8 @@
 	{#if fetching}
 		<SkeletonItem count={1} variant="detail" />
 	{:else if product}
-		<section class="flex justify-between gap-4">
-			<Lightbox src={product.thumbnail} alt={product.title} />
+		<section class="flex flex-col justify-between gap-4 md:flex-row">
+			<Lightbox src={product.thumbnail} alt={product.title} classImg="min-w-40" />
 			<div>
 				<h1 class="text-3xl font-semibold">{product.title}</h1>
 				<p>
@@ -31,10 +31,10 @@
 
 					<a href="#rewiews"> reviews</a>
 				</p>
-				<p>${product.price}</p>
+				<p class="font-bold">${product.price}</p>
 
 				{#if product.stock > 0}
-					<p class="mb-2">Available: {product.stock}</p>
+					<p class="mb-2">Available: <span class="font-semibold">{product.stock}</span></p>
 
 					<ButtonAddToCart {product} />
 				{:else}
@@ -48,22 +48,20 @@
 			</div>
 		</section>
 
-		<section id="rewiews" class="mt-4 flex gap-4">
-			<h2>Kundenrezensionen</h2>
+		<section id="rewiews" class="mt-4 flex flex-col gap-4 md:flex-row">
+			<h2 class="font-semibold">Kundenrezensionen</h2>
 
-			<div>
+			<ul class="flex flex-col gap-4">
 				{#each product.reviews as review}
-					<ul class="flex flex-col gap-4">
-						<li>
-							<strong>
-								<StarRating rating={review.rating} />
-								{review.reviewerName}
-							</strong>
-							<p>{review.comment}</p>
-						</li>
-					</ul>
+					<li>
+						<strong>
+							<StarRating rating={review.rating} />
+							{review.reviewerName}
+						</strong>
+						<p>{review.comment}</p>
+					</li>
 				{/each}
-			</div>
+			</ul>
 		</section>
 	{:else}
 		<p>Product not found</p>

@@ -14,7 +14,7 @@
 <div class="flex items-center gap-4">
 	<span>Sort by:</span>
 	<select
-		class="rounded bg-sky-600 py-2 text-white"
+		class="cursor-pointer rounded bg-sky-600 p-2 text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
 		on:change={handleSortChange}
 		bind:value={sortOption}
 	>
