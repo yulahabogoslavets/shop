@@ -4,6 +4,7 @@
 	import type { Product } from '$lib/types';
 	import StarRating from '../../components/StarRating.svelte';
 	import Lightbox from '../../components/Lightbox.svelte';
+	import ButtonAddToCart from '../../components/ButtonAddToCart.svelte';
 
 	let idProduct = page.params.id;
 	let product: any = $state<Product[]>([]);
@@ -14,8 +15,6 @@
 		product = await res.json();
 		fetching = false;
 	});
-
-	$inspect(product);
 </script>
 
 <main class="container mx-auto flex flex-col gap-4 px-4 py-10">
@@ -67,11 +66,7 @@
 				{#if product.stock > 0}
 					<p class="mb-2">Available: {product.stock}</p>
 
-					<button
-						class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
-					>
-						addToCart
-					</button>
+					<ButtonAddToCart {product} />
 				{:else}
 					<p>Out of stock</p>
 				{/if}

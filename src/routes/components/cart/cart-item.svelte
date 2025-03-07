@@ -6,6 +6,8 @@
 	};
 
 	let { cartProduct = $bindable(), removeItem }: Props = $props();
+
+	let stock = cartProduct.product.stock;
 </script>
 
 <div class="flex items-center justify-between border-b border-gray-200 py-2">
@@ -38,11 +40,12 @@
 			{cartProduct.quantity}
 		</span>
 		<button
-			class="rounded p-1 hover:bg-gray-200"
+			class="rounded p-1 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
 			aria-label="Add 1 to quantity"
 			onclick={() => cartProduct.quantity++}
+			disabled={cartProduct.quantity >= stock}
 		>
-			add
+			+
 		</button>
 		<button
 			onclick={() => removeItem(cartProduct.id)}

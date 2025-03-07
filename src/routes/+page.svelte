@@ -5,7 +5,7 @@
 	import SortOptionFilter from './components/filter/SortOptionFilter.svelte';
 	import StarRating from './components/StarRating.svelte';
 	import { searchTerm } from '$lib/store/search';
-	import { addToCart } from '$lib/store/cart';
+	import ButtonAddToCart from './components/ButtonAddToCart.svelte';
 
 	let { data } = $props();
 
@@ -170,10 +170,7 @@
 						<span><StarRating rating={product.rating} /> {product.rating} </span>
 						<div class="flex items-center justify-between gap-4">
 							<span class="text-xl font-bold">${product.price}</span>
-							<button
-								class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
-								onclick={() => addToCart(product)}>Add to cart</button
-							>
+							<ButtonAddToCart {product} />
 						</div>
 					</div>
 				</div>
