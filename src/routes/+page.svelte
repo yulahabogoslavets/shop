@@ -5,6 +5,7 @@
 	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
 	import PriceFilter from './components/filter/PriceFilter.svelte';
 	import SortOptionFilter from './components/filter/SortOptionFilter.svelte';
+	import StarRating from './components/StarRating.svelte';
 
 	let { data } = $props();
 
@@ -200,7 +201,7 @@
 						<h2 class="mb-2 truncate text-lg font-medium text-gray-600">
 							{product.title}
 						</h2>
-						<span>{product.rating}</span>
+						<span><StarRating rating={product.rating} /> {product.rating} </span>
 						<div class="flex items-center justify-between gap-4">
 							<span class="text-xl font-bold">${product.price}</span>
 							<button
