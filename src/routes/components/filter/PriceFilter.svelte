@@ -3,15 +3,12 @@
 	let { items, minPrice = $bindable(), maxPrice = $bindable() } = $props();
 
 	let initialMaxPrice = $state(0);
-	let setMinPrice = (value: number) => (minPrice = value);
-	let setMaxPrice = (value: number) => (maxPrice = value);
 
 	onMount(() => {
 		const max = Math.max(...items.map((p: { price: number }) => p.price));
+		const min = Math.min(...items.map((p: { price: number }) => p.price));
 		maxPrice = max;
 		initialMaxPrice = max;
-
-		const min = Math.min(...items.map((p: { price: number }) => p.price));
 		minPrice = min;
 	});
 
@@ -53,24 +50,54 @@
 		/>
 	</div>
 
-	<div class="mt-4 flex flex-col gap-2">
+	<!-- Range sliders -->
+	<div class="relative mt-4 w-full">
+		<div class="absolute h-1 w-full rounded-sm bg-gray-300"></div>
+		<div
+			class="absolute h-1 w-full rounded-sm bg-sky-700"
+			style="left: {(minPrice / initialMaxPrice) * 100}%; width: {((maxPrice - minPrice) /
+				initialMaxPrice) *
+				100}%"
+		></div>
 		<input
 			type="range"
-			bind:value={minPrice}
 			min="0"
 			max={initialMaxPrice}
 			step="10"
+			bind:value={minPrice}
 			oninput={handlePriceChange}
 			class="w-full"
 		/>
 		<input
 			type="range"
-			bind:value={maxPrice}
 			min="0"
 			max={initialMaxPrice}
 			step="10"
+			bind:value={maxPrice}
 			oninput={handlePriceChange}
 			class="w-full"
 		/>
 	</div>
 </div>
+
+<style>
+	input[type='range'] {
+		position: absolute;
+		width: 100%;
+		height: 6px;
+		background: none;
+		pointer-events: none;
+		-webkit-appearance: none;
+	}
+
+	input[type='range']::-webkit-slider-thumb,
+	input[type='range']::-moz-range-thumb {
+		-webkit-appearance: none;
+		width: 16px;
+		height: 16px;
+		background: blue;
+		border-radius: 50%;
+		cursor: pointer;
+		pointer-events: all;
+	}
+</style>

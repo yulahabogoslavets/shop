@@ -130,7 +130,7 @@
 	<!-- Sidebar with Focus Trap -->
 	<FocusTrap {isOpen} onClose={closeSidebar}>
 		<aside
-			class="fixed inset-0 z-50 w-full max-w-xs transform bg-white p-4 shadow-md transition-transform duration-300 lg:sticky
+			class="fixed inset-0 z-50 w-full max-w-xs transform bg-white p-4 pb-8 shadow-md transition-transform duration-300 lg:sticky
 			 lg:top-20 lg:z-0 lg:max-h-screen lg:rounded
 			{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 			aria-modal="true"
