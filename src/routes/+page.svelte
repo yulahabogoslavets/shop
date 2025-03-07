@@ -7,6 +7,7 @@
 	import ButtonAddToCart from './components/ButtonAddToCart.svelte';
 	import LoadMore from './components/LoadMore.svelte';
 	import SkeletonItem from './components/SkeletonItem.svelte';
+	import Icon from '@iconify/svelte';
 
 	let { data } = $props();
 
@@ -95,14 +96,34 @@
 			loading = false;
 		}, 500);
 	}
+
+	let isOpen = $state(false);
 </script>
 
-<main class="container mx-auto flex justify-between gap-4 py-10">
-	<aside
-		class="sticky top-0 z-10 hidden max-h-screen w-1/4 overflow-auto rounded p-4 shadow-md lg:block"
+<main class="container mx-auto flex flex-col justify-between gap-4 py-10 lg:flex-row">
+	<!-- Mobile Toggle Button -->
+	<button
+		class="m-4 self-start rounded bg-sky-700 px-4 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 lg:hidden"
+		onclick={() => (isOpen = !isOpen)}
 	>
+		{isOpen ? 'Close Filters' : 'Open Filters'}
+	</button>
+	<aside
+		class="fixed inset-0 top-16 z-20 w-3/4 max-w-xs transform bg-white p-4 shadow-md transition-transform duration-300
+		lg:sticky lg:top-10 lg:max-h-screen lg:w-1/4 lg:overflow-auto lg:rounded
+		{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
+	>
+		<!-- Close button for mobile -->
+		<button
+			class="absolute right-2 top-2 rounded-full bg-gray-200 p-2 lg:hidden"
+			onclick={() => (isOpen = false)}
+		>
+			<Icon icon="line-md:close-small" width="24" height="24" />
+		</button>
+
 		<h3 class="mb-2 text-center text-lg font-medium">Filter</h3>
-		<!-- Category Filter -->
+
+		<!-- Filters -->
 		<MultiSelectFilter
 			title="Filter by Category"
 			items={categories}
@@ -110,7 +131,6 @@
 			onChange={(updatedCategories: string[]) => (selectedCategories = updatedCategories)}
 		/>
 
-		<!-- Brand Filter -->
 		<MultiSelectFilter
 			title="Filter by Brand"
 			items={brands}
@@ -118,11 +138,21 @@
 			onChange={(updatedBrands: string[]) => (selectedBrands = updatedBrands)}
 		/>
 
-		<!-- Price Filter -->
 		<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
 	</aside>
 
-	<section class="w-full md:w-3/4">
+	<!-- Mobile overlay to close sidebar -->
+	{#if isOpen}
+		<button
+			class="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
+			aria-label="Close sidebar"
+			onclick={() => (isOpen = false)}
+			onkeydown={(event) => event.key === 'Escape' && (isOpen = false)}
+			tabindex="0"
+		></button>
+	{/if}
+
+	<section class="w-full lg:w-3/4">
 		<div class="mb-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
 			<span>
 				<span class="font-semibold" role="status" aria-live="polite">{filteredItems.length}</span> products
@@ -151,11 +181,11 @@
 							/>
 						</a>
 						<div class="flex flex-col items-center gap-2 p-4">
-							<h2 class=" hyphens-auto text-lg font-medium text-gray-600 md:truncate">
+							<h2 class="hyphens-auto text-lg font-medium text-gray-600 lg:truncate">
 								{product.title}
 							</h2>
 							<span><StarRating rating={product.rating} /> {product.rating} </span>
-							<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+							<div class="flex flex-col items-center justify-between gap-4 lg:flex-row">
 								<span class="text-xl font-bold">${product.price}</span>
 								<ButtonAddToCart {product} />
 							</div>

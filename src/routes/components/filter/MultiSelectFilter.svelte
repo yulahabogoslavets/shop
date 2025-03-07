@@ -54,7 +54,7 @@
 	});
 </script>
 
-<div class="mb-4" bind:this={dropdownRef}>
+<div class="relative mb-4" bind:this={dropdownRef}>
 	<h4 class="mb-2 text-sm font-medium">{title}:</h4>
 	<!-- Dropdown toggle button -->
 	<button
@@ -69,10 +69,10 @@
 	</button>
 
 	{#if isOpen}
-		<div class="absolute z-10 mt-1 w-full rounded bg-white shadow-lg">
+		<div class="absolute left-0 z-10 mt-1 w-full rounded bg-white shadow-lg">
 			<!-- Clear selection button -->
 			<button
-				class="w-full rounded-t bg-gray-100 p-2 text-left text-sm text-gray-700 hover:bg-gray-200"
+				class="w-full rounded-t bg-sky-700 p-2 text-left text-sm text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800"
 				onclick={clearSelections}
 			>
 				Clear Selection

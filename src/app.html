@@ -6,6 +6,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Shop</title>
 		<meta name="description" content="Shop" />
+		<style>
+			/* Prevent scrolling when sidebar is open */
+			body:has(.fixed.inset-0.bg-black) {
+				overflow: hidden;
+			}
+		</style>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
