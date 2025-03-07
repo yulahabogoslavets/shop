@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/types';
 	import Cart from './components/cart/cart.svelte';
+	import MultiSelectFilter from './components/cart/MultiSelectFilter.svelte';
 
 	let { data } = $props();
 
@@ -25,19 +26,47 @@
 	}
 
 	let searchTerm: string = $state('');
-	let selectedCategory: string = $state('');
+	let selectedCategories: string[] = $state([]);
+	let selectedBrands: string[] = $state([]);
 
+	// Calculate unique categories with counts
 	let categories = $derived.by(() => {
-		return Array.from(new Set(data.products.map((item) => item.category)));
+		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
+			acc[product.category] = (acc[product.category] || 0) + 1;
+			return acc;
+		}, {});
+		return Object.entries(counts).map(([key, count]) => ({
+			label: key,
+			value: key,
+			count
+		}));
 	});
 
+	let brands = $derived.by(() => {
+		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
+			acc[product.brand] = (acc[product.brand] || 0) + 1;
+			return acc;
+		}, {});
+		return Object.entries(counts).map(([key, count]) => ({
+			label: key,
+			value: key,
+			count
+		}));
+	});
+
+	// Filter products by search term, selected categories, and selected brands
 	let filteredItems = $derived.by(() => {
 		return data.products.filter((item) => {
 			const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-			const matchesCategory = selectedCategory ? item.category === selectedCategory : true; // Show all if no category selected
-			return matchesSearch && matchesCategory;
+			const matchesCategory =
+				selectedCategories.length === 0 || selectedCategories.includes(item.category);
+			const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(item.brand);
+
+			return matchesSearch && matchesCategory && matchesBrand;
 		});
 	});
+
+	console.log(data.products);
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -59,15 +88,24 @@
 	</div>
 </header>
 
-<main class="container mx-auto flex justify-between bg-gray-100 px-4 py-10">
-	<aside class="w-1/4">
-		<h3 class="mb-2 text-lg font-medium">Filter by Category</h3>
-		<select bind:value={selectedCategory} class="w-full rounded border border-gray-300 p-2">
-			<option value="">All Categories</option>
-			{#each categories as category}
-				<option value={category}>{category}</option>
-			{/each}
-		</select>
+<main class="container mx-auto flex justify-between gap-4 bg-gray-100 px-4 py-10">
+	<aside class="sticky top-0 z-50 max-h-screen w-1/4 overflow-auto rounded p-4 shadow-md">
+		<h3 class="mb-2 text-center text-lg font-medium">Filter</h3>
+		<!-- Category Filter -->
+		<MultiSelectFilter
+			title="Filter by Category"
+			items={categories}
+			selected={selectedCategories}
+			onChange={(updatedCategories: string[]) => (selectedCategories = updatedCategories)}
+		/>
+
+		<!-- Brand Filter -->
+		<MultiSelectFilter
+			title="Filter by Brand"
+			items={brands}
+			selected={selectedBrands}
+			onChange={(updatedBrands: string[]) => (selectedBrands = updatedBrands)}
+		/>
 	</aside>
 
 	<div class="grid grid-cols-2 gap-6">
