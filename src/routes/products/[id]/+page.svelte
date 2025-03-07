@@ -6,6 +6,8 @@
 	import Lightbox from '../../components/Lightbox.svelte';
 	import ButtonAddToCart from '../../components/ButtonAddToCart.svelte';
 	import SkeletonItem from '../../components/SkeletonItem.svelte';
+	import Icon from '@iconify/svelte';
+	import { fade } from 'svelte/transition';
 
 	let idProduct = page.params.id;
 	let product: any = $state<Product[]>([]);
@@ -16,6 +18,12 @@
 		product = await res.json();
 		fetching = false;
 	});
+
+	let activeReviewIndex: number | null = $state(null);
+
+	function toggleReview(index: number) {
+		activeReviewIndex = activeReviewIndex === index ? null : index;
+	}
 </script>
 
 <main class="container mx-auto flex flex-col gap-4 px-4 py-10">
@@ -48,17 +56,43 @@
 			</div>
 		</section>
 
-		<section id="rewiews" class="mt-4 flex flex-col gap-4 md:flex-row">
+		<section id="reviews" class="mt-4 flex flex-col gap-4 md:flex-row">
 			<h2 class="font-semibold">Kundenrezensionen</h2>
 
 			<ul class="flex flex-col gap-4">
-				{#each product.reviews as review}
-					<li>
-						<strong>
-							<StarRating rating={review.rating} />
-							{review.reviewerName}
-						</strong>
-						<p>{review.comment}</p>
+				{#each product.reviews as review, index}
+					<li
+						class="rounded-md border border-gray-200 p-4 hover:border-sky-700 focus:border-sky-700"
+					>
+						<button
+							class="group flex w-full cursor-pointer items-center justify-between gap-2"
+							onclick={() => toggleReview(index)}
+							onkeydown={(event) => {
+								if (event.key === 'Enter' || event.key === ' ') {
+									toggleReview(index);
+								}
+							}}
+							aria-expanded={activeReviewIndex === index ? 'true' : 'false'}
+							aria-controls={`review-${index}`}
+							title={activeReviewIndex === index ? 'Close' : 'Open'}
+							aria-label={activeReviewIndex === index ? 'Close' : 'Open'}
+						>
+							<div class="flex flex-grow items-center gap-2">
+								<StarRating rating={review.rating} />
+								<strong>{review.reviewerName}</strong>
+							</div>
+
+							<Icon
+								icon={activeReviewIndex === index ? 'mdi-light:minus' : 'mdi-light:plus'}
+								width="24"
+								height="24"
+								class="transition-transform group-hover:scale-110"
+							/>
+						</button>
+
+						{#if activeReviewIndex === index}
+							<p id={`review-${index}`} in:fade out:fade>{review.comment}</p>
+						{/if}
 					</li>
 				{/each}
 			</ul>
