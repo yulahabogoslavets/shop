@@ -1,10 +1,28 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/types';
-	import Cart from './cart.svelte';
+	import Cart from './components/cart/cart.svelte';
 
 	let { data } = $props();
 
 	let cartProductsMain = $state<CartProduct[]>([]);
+
+	// Function to add product to cart or increase quantity if already exists
+	function addToCart(product: CartProduct['product']) {
+		// Check if product already exists in the cart
+		const existingProduct = cartProductsMain.find((p) => p.product.id === product.id);
+
+		if (existingProduct) {
+			// Increase the quantity if the product is already in the cart
+			existingProduct.quantity += 1;
+		} else {
+			// Add the product as a new entry in the cart
+			cartProductsMain.push({
+				id: crypto.randomUUID(),
+				quantity: 1,
+				product
+			});
+		}
+	}
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -35,13 +53,7 @@
 						<span class="text-xl font-bold">${product.price}</span>
 						<button
 							class="rounded-full bg-sky-600 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-700"
-							onclick={() => {
-								cartProductsMain.push({
-									id: crypto.randomUUID(),
-									quantity: 1,
-									product: product
-								});
-							}}>Add to cart</button
+							onclick={() => addToCart(product)}>Add to cart</button
 						>
 					</div>
 				</div>
