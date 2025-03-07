@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import CartItem from './cart-item.svelte';
 	import Icon from '@iconify/svelte';
+	import FocusTrap from '$lib/FocusTrap.svelte';
 
 	onMount(() => {
 		const savedCart = localStorage.getItem('cart');
@@ -59,29 +60,44 @@
 </button>
 
 {#if cartOpen}
-	<div class="absolute right-0 top-8 z-10 mt-2 w-80 rounded-lg bg-white shadow-xl">
-		<div class="relative p-4">
-			<h2 class="mb-4 text-lg font-semibold">Your Cart</h2>
-			<button
-				class="absolute right-4 top-4 rounded-full p-1 hover:bg-gray-100"
-				aria-label="close cart"
-				onclick={() => (cartOpen = false)}
-			>
-				x
-			</button>
-			{#each cartProducts as _, i}
-				<CartItem bind:cartProduct={cartProducts[i]} removeItem={removeFromCart} />
-			{/each}
+	<FocusTrap isOpen={cartOpen} onClose={() => (cartOpen = false)}>
+		<div
+			class="fixed inset-0 z-10 bg-black bg-opacity-50"
+			aria-hidden="true"
+			onclick={() => (cartOpen = false)}
+		></div>
 
-			{#if cartProducts.length === 0}
-				<p class="text-gray-500">Your cart is empty</p>
-			{/if}
+		<div class="absolute right-0 top-8 z-10 mt-2 w-80 rounded-lg bg-white shadow-xl">
+			<div class="relative p-4">
+				<h2 class="mb-4 text-lg font-semibold">Your Cart</h2>
+				<button
+					class="group absolute right-4 top-4 rounded-full p-1 hover:bg-gray-100 focus:bg-gray-100"
+					aria-label="close cart"
+					onclick={() => (cartOpen = false)}
+				>
+					<Icon
+						icon="line-md:close"
+						width="24"
+						height="24"
+						class="transition-transform group-hover:scale-110"
+					/>
+				</button>
+				{#each cartProducts as _, i}
+					<CartItem bind:cartProduct={cartProducts[i]} removeItem={removeFromCart} />
+				{/each}
 
-			{#if cartProducts.length > 0}
-				<div class="mt-4 border-gray-200 pt-4">
-					<p class="text-lg font-semibold">Total: ${cartStats.total.toFixed(2)}</p>
-				</div>
-			{/if}
+				{#if cartProducts.length === 0}
+					<p class="text-gray-500">Your cart is empty</p>
+				{/if}
+
+				{#if cartProducts.length > 0}
+					<div class="mt-4 border-gray-200 pt-4">
+						<p class="text-lg font-semibold">
+							Total: <span class="text-sky-700">${cartStats.total.toFixed(2)}</span>
+						</p>
+					</div>
+				{/if}
+			</div>
 		</div>
-	</div>
+	</FocusTrap>
 {/if}
