@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
 	import type { CartProduct } from '$lib/types';
 	import Cart from './components/cart/cart.svelte';
 	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
@@ -35,6 +36,11 @@
 	let maxPrice: number = $state(0);
 
 	let sortOption: 'price_asc' | 'price_desc' | 'rating_desc' | 'rating_asc' = $state('rating_desc');
+
+	let visibleItemsCount = $state(10);
+	let loading = $state(false);
+	let allItemsLoaded = $state(false);
+
 	// Calculate unique categories with counts
 	let categories = $derived.by(() => {
 		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
@@ -91,6 +97,49 @@
 	) {
 		sortOption = newSortOption;
 	}
+
+	// Function to handle loading more products when needed
+	function loadMoreItems() {
+		if (filteredItems.length <= visibleItemsCount) {
+			allItemsLoaded = true;
+			loading = false;
+			return;
+		}
+		loading = true;
+
+		setTimeout(() => {
+			if (filteredItems.length <= visibleItemsCount + 5) {
+				visibleItemsCount = filteredItems.length;
+			} else {
+				visibleItemsCount += 5;
+			}
+			loading = false;
+		}, 1000);
+	}
+
+	let observer: IntersectionObserver;
+
+	onMount(() => {
+		observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					loadMoreItems();
+				}
+			},
+			{ threshold: 1.0 }
+		);
+
+		const loadMoreElement = document.getElementById('load-more-trigger');
+		if (loadMoreElement) {
+			observer.observe(loadMoreElement);
+		}
+	});
+
+	onDestroy(() => {
+		if (observer) {
+			observer.disconnect();
+		}
+	});
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -163,5 +212,24 @@
 				</div>
 			{/each}
 		</div>
+
+		<!-- Load More Trigger Element -->
+		<div id="load-more-trigger" class="h-10"></div>
+
+		<!-- Loading Spinner (only visible while loading) -->
+		{#if loading}
+			<div class="my-4 text-center">
+				<svg
+					class="mx-auto h-8 w-8 animate-spin text-blue-500"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+				>
+					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
+					></circle>
+					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"
+					></path>
+				</svg>
+			</div>
+		{/if}
 	</section>
 </main>
