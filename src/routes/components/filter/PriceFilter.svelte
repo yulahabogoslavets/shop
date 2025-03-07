@@ -26,7 +26,7 @@
 </script>
 
 <div class="mb-4">
-	<h3 class="mb-2 text-lg font-medium">Price Filter</h3>
+	<h4 class="mb-2 text-sm font-medium">Price Filter</h4>
 
 	<div class="flex items-center gap-2">
 		<label for="min-price" class="sr-only">Minimum Price</label>

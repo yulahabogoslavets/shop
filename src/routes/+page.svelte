@@ -8,6 +8,7 @@
 	import LoadMore from './components/LoadMore.svelte';
 	import SkeletonItem from './components/SkeletonItem.svelte';
 	import Icon from '@iconify/svelte';
+	import FocusTrap from '$lib/FocusTrap.svelte';
 
 	let { data } = $props();
 
@@ -20,6 +21,9 @@
 	let visibleItemsCount = $state(10);
 	let loading = $state(false);
 	let allItemsLoaded = $state(false);
+
+	let isOpen = $state(false);
+	let toggleButton: HTMLButtonElement;
 
 	let categories = $derived.by(() => {
 		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
@@ -97,91 +101,117 @@
 		}, 500);
 	}
 
-	let isOpen = $state(false);
+	function openSidebar() {
+		isOpen = true;
+	}
+
+	function closeSidebar() {
+		isOpen = false;
+		toggleButton?.focus();
+	}
 </script>
 
 <main class="container mx-auto flex flex-col justify-between gap-4 py-10 lg:flex-row">
 	<!-- Mobile Toggle Button -->
 	<button
-		class="m-4 self-start rounded bg-sky-700 px-4 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 lg:hidden"
-		onclick={() => (isOpen = !isOpen)}
+		bind:this={toggleButton}
+		class="group mx-4 flex items-center justify-center gap-2 rounded bg-sky-700 px-4 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 lg:hidden"
+		onclick={openSidebar}
 	>
-		{isOpen ? 'Close Filters' : 'Open Filters'}
+		<Icon
+			icon="line-md:filter"
+			width="24"
+			height="24"
+			class="transition-transform group-hover:scale-110"
+		/>
+		<span>{isOpen ? 'Close Filters' : 'Filters and Sort'}</span>
 	</button>
-	<aside
-		class="fixed inset-0 top-16 z-20 w-3/4 max-w-xs transform bg-white p-4 shadow-md transition-transform duration-300
-		lg:sticky lg:top-10 lg:max-h-screen lg:w-1/4 lg:overflow-auto lg:rounded
-		{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
-	>
-		<!-- Close button for mobile -->
-		<button
-			class="absolute right-2 top-2 rounded-full bg-gray-200 p-2 lg:hidden"
-			onclick={() => (isOpen = false)}
+
+	<!-- Sidebar with Focus Trap -->
+	<FocusTrap {isOpen} onClose={closeSidebar}>
+		<aside
+			class="fixed inset-0 z-50 w-full max-w-xs transform bg-white p-4 shadow-md transition-transform duration-300 lg:sticky
+			 lg:top-20 lg:z-0 lg:max-h-screen lg:overflow-auto lg:rounded
+			{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
+			aria-modal="true"
+			role="dialog"
 		>
-			<Icon icon="line-md:close-small" width="24" height="24" />
-		</button>
+			<!-- Close button for mobile -->
+			<button
+				class="absolute right-2 top-2 rounded-full bg-gray-200 p-2 lg:hidden"
+				onclick={closeSidebar}
+			>
+				<Icon icon="line-md:close-small" width="24" height="24" />
+			</button>
 
-		<h3 class="mb-2 text-center text-lg font-medium">Filter</h3>
+			<h3 class="mb-2 text-center text-lg font-medium">Filter</h3>
 
-		<!-- Filters -->
-		<MultiSelectFilter
-			title="Filter by Category"
-			items={categories}
-			selected={selectedCategories}
-			onChange={(updatedCategories: string[]) => (selectedCategories = updatedCategories)}
-		/>
+			<!-- Filters -->
+			<MultiSelectFilter
+				title="Filter by Category"
+				items={categories}
+				selected={selectedCategories}
+				onChange={(updatedCategories: string[]) => (selectedCategories = updatedCategories)}
+			/>
 
-		<MultiSelectFilter
-			title="Filter by Brand"
-			items={brands}
-			selected={selectedBrands}
-			onChange={(updatedBrands: string[]) => (selectedBrands = updatedBrands)}
-		/>
+			<MultiSelectFilter
+				title="Filter by Brand"
+				items={brands}
+				selected={selectedBrands}
+				onChange={(updatedBrands: string[]) => (selectedBrands = updatedBrands)}
+			/>
 
-		<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
-	</aside>
+			<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
+
+			<div class="flex flex-col gap-2 lg:hidden">
+				<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
+			</div>
+		</aside>
+	</FocusTrap>
 
 	<!-- Mobile overlay to close sidebar -->
 	{#if isOpen}
 		<button
 			class="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
 			aria-label="Close sidebar"
-			onclick={() => (isOpen = false)}
-			onkeydown={(event) => event.key === 'Escape' && (isOpen = false)}
-			tabindex="0"
+			onclick={closeSidebar}
 		></button>
 	{/if}
 
 	<section class="w-full lg:w-3/4">
-		<div class="mb-4 flex flex-col items-center justify-between gap-4 sm:flex-row">
+		<div
+			class="mb-4 flex flex-col items-center justify-between gap-4 border-b border-gray-200 pb-2 sm:flex-row"
+		>
 			<span>
 				<span class="font-semibold" role="status" aria-live="polite">{filteredItems.length}</span> products
 			</span>
 
-			<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
+			<div class="hidden items-center gap-4 lg:flex">
+				<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
+			</div>
 		</div>
 
-		<div class="grid gap-6 px-4 sm:grid-cols-2" aria-live="polite">
+		<div class="grid gap-6 px-4 xl:grid-cols-2" aria-live="polite">
 			{#if loading}
 				<SkeletonItem count={visibleItemsCount} variant="list" />
 			{:else}
 				{#each filteredItems.slice(0, visibleItemsCount) as product}
-					<div class="overflow-hidden rounded-xl bg-white shadow-lg">
+					<div class=" rounded-xl bg-white shadow-lg">
 						<a
 							href="/products/{product.id}"
 							title="Show '{product.title}' details"
 							aria-label="Show '{product.title}' details"
-							class="group shadow-sm"
+							class="group block h-48 overflow-hidden shadow-sm"
 						>
 							<img
 								src={product.thumbnail}
 								alt={product.title}
-								class="h-48 w-full object-cover transition-transform group-hover:scale-105"
+								class="h-full w-full object-contain transition-transform group-hover:scale-105"
 								loading="lazy"
 							/>
 						</a>
-						<div class="flex flex-col items-center gap-2 p-4">
-							<h2 class="hyphens-auto text-lg font-medium text-gray-600 lg:truncate">
+						<div class="flex flex-col items-center gap-4 p-4">
+							<h2 class="hyphens-auto text-lg font-medium text-gray-600">
 								{product.title}
 							</h2>
 							<span><StarRating rating={product.rating} /> {product.rating} </span>

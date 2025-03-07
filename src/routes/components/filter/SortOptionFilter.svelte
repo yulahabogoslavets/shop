@@ -11,17 +11,15 @@
 	}
 </script>
 
-<div class="flex items-center gap-4">
-	<label for="sort-options">Sort by:</label>
-	<select
-		id="sort-options"
-		class="cursor-pointer rounded bg-sky-700 p-2 text-white hover:bg-sky-800 focus:bg-sky-800"
-		on:change={handleSortChange}
-		bind:value={sortOption}
-	>
-		<option value="rating_desc">Most Liked (Rating)</option>
-		<option value="rating_asc">Least Liked (Rating)</option>
-		<option value="price_asc">Price: Low to High</option>
-		<option value="price_desc">Price: High to Low</option>
-	</select>
-</div>
+<label for="sort-options" class="text-sm font-medium">Sort by:</label>
+<select
+	id="sort-options"
+	class="cursor-pointer rounded bg-sky-700 p-2 text-white hover:bg-sky-800 focus:bg-sky-800"
+	on:change={handleSortChange}
+	bind:value={sortOption}
+>
+	<option value="rating_desc">Most Liked (Rating)</option>
+	<option value="rating_asc">Least Liked (Rating)</option>
+	<option value="price_asc">Price: Low to High</option>
+	<option value="price_desc">Price: High to Low</option>
+</select>
