@@ -1,35 +1,14 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import type { CartProduct } from '$lib/types';
-	import Cart from './components/cart/cart.svelte';
 	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
 	import PriceFilter from './components/filter/PriceFilter.svelte';
 	import SortOptionFilter from './components/filter/SortOptionFilter.svelte';
 	import StarRating from './components/StarRating.svelte';
+	import { searchTerm } from '$lib/store/search';
+	import { addToCart } from '$lib/store/cart';
 
 	let { data } = $props();
 
-	let cartProductsMain = $state<CartProduct[]>([]);
-
-	// Function to add product to cart or increase quantity if already exists
-	function addToCart(product: CartProduct['product']) {
-		// Check if product already exists in the cart
-		const existingProduct = cartProductsMain.find((p) => p.product.id === product.id);
-
-		if (existingProduct) {
-			// Increase the quantity if the product is already in the cart
-			existingProduct.quantity += 1;
-		} else {
-			// Add the product as a new entry in the cart
-			cartProductsMain.push({
-				id: crypto.randomUUID(),
-				quantity: 1,
-				product
-			});
-		}
-	}
-
-	let searchTerm: string = $state('');
 	let selectedCategories: string[] = $state([]);
 	let selectedBrands: string[] = $state([]);
 
@@ -70,7 +49,7 @@
 	// Filter products by search term, selected categories, and selected brands
 	let filteredItems = $derived.by(() => {
 		let filtered = data.products.filter((item) => {
-			const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+			const matchesSearch = item.title.toLowerCase().includes($searchTerm.toLowerCase()); // Use get() here
 			const matchesCategory =
 				selectedCategories.length === 0 || selectedCategories.includes(item.category);
 			const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(item.brand);
@@ -142,25 +121,6 @@
 		}
 	});
 </script>
-
-<header class="flex items-center justify-between bg-gray-300 p-4">
-	<a href="/" title="Start page">Shop</a>
-
-	<div class="ml-auto">
-		<label for="search" class="hidden"> Search </label>
-		<input
-			type="search"
-			id="search"
-			placeholder="Search"
-			class="rounded p-1"
-			bind:value={searchTerm}
-		/>
-	</div>
-
-	<div class="relative ml-auto flex items-center">
-		<Cart bind:cartProducts={cartProductsMain} />
-	</div>
-</header>
 
 <main class="container mx-auto flex justify-between gap-4 bg-gray-100 px-4 py-10">
 	<aside class="sticky top-0 z-50 max-h-screen w-1/4 overflow-auto rounded p-4 shadow-md">
