@@ -1,22 +1,20 @@
-# sv
+# 🛍️ Shop Website
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This is a simple shop website that integrates with the [DummyJSON Products API](https://dummyjson.com/products) to display and filter products.
 
-## Creating a project
+## 🚀 Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Fetch products from the API
+- Display product details
+- Filter products by category, price
 
-```bash
-# create a new project in the current directory
-npx sv create
+## 🔧 Technologies Used
 
-# create a new project in my-app
-npx sv create my-app
-```
+- Svelte 5, Sveltekit, Tailwind 3
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Installed dependencies with `npm install`, start a development server:
 
 ```bash
 npm run dev
