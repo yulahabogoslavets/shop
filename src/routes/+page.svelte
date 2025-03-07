@@ -111,7 +111,7 @@
 	}
 </script>
 
-<main class="container mx-auto flex flex-col justify-between gap-4 py-10 lg:flex-row">
+<main class="container mx-auto flex flex-col justify-between gap-4 py-10 lg:flex-row lg:gap-8">
 	<!-- Mobile Toggle Button -->
 	<button
 		bind:this={toggleButton}
@@ -191,12 +191,12 @@
 			</div>
 		</div>
 
-		<div class="grid gap-6 px-4 xl:grid-cols-2" aria-live="polite">
+		<div class="grid gap-6 xl:grid-cols-2" aria-live="polite">
 			{#if loading}
 				<SkeletonItem count={visibleItemsCount} variant="list" />
 			{:else}
 				{#each filteredItems.slice(0, visibleItemsCount) as product}
-					<div class=" rounded-xl bg-white shadow-lg">
+					<div class="rounded-xl bg-white shadow-lg">
 						<a
 							href="/products/{product.id}"
 							title="Show '{product.title}' details"
