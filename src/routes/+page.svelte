@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/types';
 	import Cart from './components/cart/cart.svelte';
-	import MultiSelectFilter from './components/cart/MultiSelectFilter.svelte';
+	import MultiSelectFilter from './components/filter/MultiSelectFilter.svelte';
+	import PriceFilter from './components/filter/PriceFilter.svelte';
 
 	let { data } = $props();
 
@@ -28,6 +29,9 @@
 	let searchTerm: string = $state('');
 	let selectedCategories: string[] = $state([]);
 	let selectedBrands: string[] = $state([]);
+
+	let minPrice: number = $state(0);
+	let maxPrice: number = $state(0);
 
 	// Calculate unique categories with counts
 	let categories = $derived.by(() => {
@@ -61,12 +65,11 @@
 			const matchesCategory =
 				selectedCategories.length === 0 || selectedCategories.includes(item.category);
 			const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(item.brand);
+			const matchesPrice = item.price >= minPrice && item.price <= maxPrice;
 
-			return matchesSearch && matchesCategory && matchesBrand;
+			return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
 		});
 	});
-
-	console.log(data.products);
 </script>
 
 <header class="flex items-center justify-between bg-gray-300 p-4">
@@ -106,6 +109,9 @@
 			selected={selectedBrands}
 			onChange={(updatedBrands: string[]) => (selectedBrands = updatedBrands)}
 		/>
+
+		<!-- Price Filter -->
+		<PriceFilter items={data.products} bind:minPrice bind:maxPrice />
 	</aside>
 
 	<div class="grid grid-cols-2 gap-6">
