@@ -11,17 +11,13 @@
 
 	let selectedCategories: string[] = $state([]);
 	let selectedBrands: string[] = $state([]);
-
 	let minPrice: number = $state(0);
 	let maxPrice: number = $state(0);
-
 	let sortOption: 'price_asc' | 'price_desc' | 'rating_desc' | 'rating_asc' = $state('rating_desc');
 
 	let visibleItemsCount = $state(10);
 	let loading = $state(false);
 	let allItemsLoaded = $state(false);
-
-	// Calculate unique categories with counts
 	let categories = $derived.by(() => {
 		const counts = data.products.reduce((acc: { [key: string]: number }, product) => {
 			acc[product.category] = (acc[product.category] || 0) + 1;
@@ -46,10 +42,10 @@
 		}));
 	});
 
-	// Filter products by search term, selected categories, and selected brands
+	// Filtered items based on criteria
 	let filteredItems = $derived.by(() => {
 		let filtered = data.products.filter((item) => {
-			const matchesSearch = item.title.toLowerCase().includes($searchTerm.toLowerCase()); // Use get() here
+			const matchesSearch = item.title.toLowerCase().includes($searchTerm.toLowerCase());
 			const matchesCategory =
 				selectedCategories.length === 0 || selectedCategories.includes(item.category);
 			const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(item.brand);
@@ -58,27 +54,28 @@
 			return matchesSearch && matchesCategory && matchesBrand && matchesPrice;
 		});
 
-		// Sort products based on the selected sort option
+		// Sort products based on selected option
 		if (sortOption === 'price_asc') {
-			filtered = filtered.sort((a, b) => a.price - b.price); // Price Ascending
+			filtered = filtered.sort((a, b) => a.price - b.price);
 		} else if (sortOption === 'price_desc') {
-			filtered = filtered.sort((a, b) => b.price - a.price); // Price Descending
+			filtered = filtered.sort((a, b) => b.price - a.price);
 		} else if (sortOption === 'rating_desc') {
-			filtered = filtered.sort((a, b) => b.rating - a.rating); // Most Liked (Rating Descending)
+			filtered = filtered.sort((a, b) => b.rating - a.rating);
 		} else if (sortOption === 'rating_asc') {
-			filtered = filtered.sort((a, b) => a.rating - b.rating); // Least Liked (Rating Ascending)
+			filtered = filtered.sort((a, b) => a.rating - b.rating);
 		}
 
 		return filtered;
 	});
 
+	// Handle sort changes
 	function handleSortChange(
 		newSortOption: 'price_asc' | 'price_desc' | 'rating_desc' | 'rating_asc'
 	) {
 		sortOption = newSortOption;
 	}
 
-	// Function to handle loading more products when needed
+	// Load more items when triggered
 	function loadMoreItems() {
 		if (filteredItems.length <= visibleItemsCount) {
 			allItemsLoaded = true;
@@ -102,7 +99,7 @@
 	onMount(() => {
 		observer = new IntersectionObserver(
 			([entry]) => {
-				if (entry.isIntersecting) {
+				if (entry.isIntersecting && !allItemsLoaded && !loading) {
 					loadMoreItems();
 				}
 			},
@@ -154,7 +151,7 @@
 			<SortOptionFilter {sortOption} onSortChange={handleSortChange} />
 		</div>
 		<div class="grid grid-cols-2 gap-6" aria-live="polite">
-			{#each filteredItems as product}
+			{#each filteredItems.slice(0, visibleItemsCount) as product}
 				<div class="overflow-hidden rounded-xl bg-white shadow-lg">
 					<a
 						href="/products/{product.id}"
@@ -188,10 +185,15 @@
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 				>
-					<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
-					></circle>
-					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z"
-					></path>
+					<circle
+						class="opacity-25"
+						cx="12"
+						cy="12"
+						r="10"
+						stroke="currentColor"
+						stroke-width="4"
+					/>
+					<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0z" />
 				</svg>
 			</div>
 		{/if}
