@@ -44,7 +44,7 @@
 
 <button
 	onclick={() => (cartOpen = !cartOpen)}
-	class="group flex items-center gap-2 rounded-lg bg-sky-700 p-2 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 sm:px-4"
+	class="group relative flex items-center gap-2 rounded-lg bg-sky-700 p-2 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 sm:px-4"
 	title="Cart"
 	aria-label="Cart"
 >
@@ -54,6 +54,17 @@
 		height="24"
 		class="transition-transform group-hover:scale-110"
 	/>
+
+	<!-- Show quantity on mobile in corner -->
+	{#if cartStats.quantity > 0}
+		<span
+			class="absolute -left-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-xs text-white sm:hidden"
+		>
+			{cartStats.quantity}
+		</span>
+	{/if}
+
+	<!-- Show "Cart (quantity)" text on larger screens -->
 	<span class="hidden sm:block">
 		Cart {#if cartStats.quantity > 0}({cartStats.quantity}){/if}
 	</span>
