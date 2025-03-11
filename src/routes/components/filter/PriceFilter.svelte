@@ -3,6 +3,8 @@
 	let { items, minPrice = $bindable(), maxPrice = $bindable() } = $props();
 
 	let initialMaxPrice = $state(0);
+	let initialMinPrice = $state(0);
+	let hasPriceFilterChanged = $state(false);
 
 	onMount(() => {
 		const max = Math.max(...items.map((p: { price: number }) => p.price));
@@ -10,6 +12,7 @@
 		maxPrice = max;
 		initialMaxPrice = max;
 		minPrice = min;
+		initialMinPrice = min;
 	});
 
 	function handlePriceChange() {
@@ -19,11 +22,31 @@
 		if (minPrice > maxPrice) {
 			maxPrice = minPrice;
 		}
+
+		hasPriceFilterChanged = minPrice !== initialMinPrice || maxPrice !== initialMaxPrice;
+	}
+
+	function clearPriceFilter() {
+		minPrice = initialMinPrice;
+		maxPrice = initialMaxPrice;
+		hasPriceFilterChanged = false;
 	}
 </script>
 
 <div class="my-4">
-	<h4 class="mb-2 text-sm font-medium">Price Filter</h4>
+	<div class="mb-2 flex items-center justify-between gap-4">
+		<h4 class="text-sm font-medium">Price Filter</h4>
+
+		<!-- Clear filter button only if the filter has changed -->
+		{#if hasPriceFilterChanged}
+			<button
+				class="w-fit rounded bg-sky-700 p-2 text-left text-sm text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800"
+				onclick={clearPriceFilter}
+			>
+				Clear Price Filter
+			</button>
+		{/if}
+	</div>
 
 	<div class="flex items-center gap-2">
 		<input
@@ -86,13 +109,10 @@
 		width: 100%;
 		height: 8px;
 		background: none;
-		pointer-events: none;
-		-webkit-appearance: none;
 	}
 
 	input[type='range']::-webkit-slider-thumb,
 	input[type='range']::-moz-range-thumb {
-		-webkit-appearance: none;
 		width: 24px;
 		height: 24px;
 		background: blue;
