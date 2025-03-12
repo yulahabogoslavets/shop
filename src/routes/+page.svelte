@@ -193,7 +193,7 @@
 			</div>
 		</div>
 
-		<div class="grid gap-6 xl:grid-cols-2" aria-live="polite">
+		<div class="grid gap-6 px-4 xl:grid-cols-2" aria-live="polite">
 			{#if loading}
 				<SkeletonItem count={visibleItemsCount} variant="list" />
 			{:else}
