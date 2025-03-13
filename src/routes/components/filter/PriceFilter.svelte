@@ -40,7 +40,7 @@
 		<!-- Clear filter button only if the filter has changed -->
 		{#if hasPriceFilterChanged}
 			<button
-				class="w-fit rounded bg-sky-700 p-2 text-left text-sm text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800"
+				class="w-fit rounded-sm bg-sky-700 p-2 text-left text-sm text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800"
 				onclick={clearPriceFilter}
 			>
 				Clear Price Filter
@@ -53,7 +53,7 @@
 			type="number"
 			id="min-price"
 			bind:value={minPrice}
-			class="w-full rounded border p-2 text-sm"
+			class="w-full rounded-sm border p-2 text-sm"
 			min="0"
 			step="10"
 			oninput={handlePriceChange}
@@ -64,7 +64,7 @@
 			type="number"
 			id="max-price"
 			bind:value={maxPrice}
-			class="w-full rounded border p-2 text-sm"
+			class="w-full rounded-sm border p-2 text-sm"
 			min="0"
 			max={maxPrice}
 			step="10"
@@ -75,9 +75,9 @@
 
 	<!-- Range sliders -->
 	<div class="relative my-6 w-full">
-		<div class="absolute h-1 w-full rounded-sm bg-gray-300"></div>
+		<div class="absolute h-1 w-full rounded-xs bg-gray-300"></div>
 		<div
-			class="absolute h-1 w-full rounded-sm bg-sky-700"
+			class="absolute h-1 w-full rounded-xs bg-sky-700"
 			style="left: {(minPrice / initialMaxPrice) * 100}%; width: {((maxPrice - minPrice) /
 				initialMaxPrice) *
 				100}%"

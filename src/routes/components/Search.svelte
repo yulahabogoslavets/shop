@@ -27,7 +27,7 @@
 		type="search"
 		id="search"
 		placeholder="Search"
-		class="w-full rounded border border-gray-300 py-1 pl-10 pr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+		class="w-full rounded-sm border border-gray-300 py-1 pl-10 pr-2 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 		bind:value={$searchTerm}
 	/>
 </div>
@@ -58,7 +58,7 @@
 					type="search"
 					id="search"
 					placeholder="Search"
-					class="w-full rounded border border-gray-300 py-1 pl-10 pr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+					class="w-full rounded-sm border border-gray-300 py-1 pl-10 pr-2 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 					bind:value={$searchTerm}
 				/>
 

@@ -26,7 +26,7 @@
 	}
 </script>
 
-<main class="container mx-auto flex flex-col gap-4 px-4 py-10">
+<main class="container mx-auto flex w-[85cqw] flex-col gap-4 px-4 py-10">
 	{#if fetching}
 		<SkeletonItem count={1} variant="detail" />
 	{:else if product}
@@ -77,7 +77,7 @@
 							title={activeReviewIndex === index ? 'Close' : 'Open'}
 							aria-label={activeReviewIndex === index ? 'Close' : 'Open'}
 						>
-							<div class="flex flex-grow items-center gap-2">
+							<div class="flex grow items-center gap-2">
 								<StarRating rating={review.rating} />
 								<strong>{review.reviewerName}</strong>
 							</div>

@@ -58,7 +58,7 @@
 	<!-- Show quantity on mobile in corner -->
 	{#if cartStats.quantity > 0}
 		<span
-			class="absolute -left-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-xs text-white sm:hidden"
+			class="absolute -top-2 -left-2 flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-xs text-white sm:hidden"
 		>
 			{cartStats.quantity}
 		</span>
@@ -73,16 +73,16 @@
 {#if cartOpen}
 	<FocusTrap isOpen={cartOpen} onClose={() => (cartOpen = false)}>
 		<div
-			class="fixed inset-0 z-10 bg-black bg-opacity-50"
+			class="fixed inset-0 z-10 bg-black/50"
 			aria-hidden="true"
 			onclick={() => (cartOpen = false)}
 		></div>
 
-		<div class="absolute right-0 top-8 z-10 mt-2 w-80 rounded-lg bg-white shadow-xl">
+		<div class="absolute top-8 right-0 z-10 mt-2 w-80 rounded-lg bg-white shadow-xl">
 			<div class="relative p-4">
 				<h2 class="mb-4 text-lg font-semibold">Your Cart</h2>
 				<button
-					class="group absolute right-4 top-4 rounded-full p-1 hover:bg-gray-100 focus:bg-gray-100"
+					class="group absolute top-4 right-4 rounded-full p-1 hover:bg-gray-100 focus:bg-gray-100"
 					aria-label="close cart"
 					onclick={() => (cartOpen = false)}
 				>

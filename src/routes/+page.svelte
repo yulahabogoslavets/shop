@@ -112,11 +112,13 @@
 	}
 </script>
 
-<main class="container mx-auto flex flex-col justify-between gap-4 py-10 lg:flex-row lg:gap-8">
+<main
+	class="container mx-auto flex w-[85cqw] flex-col justify-between gap-4 py-10 lg:flex-row lg:gap-8"
+>
 	<!-- Mobile Toggle Button -->
 	<button
 		bind:this={toggleButton}
-		class="group mx-4 flex items-center justify-center gap-2 rounded bg-sky-700 px-4 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 lg:hidden"
+		class="group mx-4 flex items-center justify-center gap-2 rounded-sm bg-sky-700 px-4 py-2 text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800 lg:hidden"
 		onclick={openSidebar}
 	>
 		<Icon
@@ -132,7 +134,7 @@
 	<FocusTrap {isOpen} onClose={closeSidebar}>
 		<aside
 			class="fixed inset-0 z-50 w-full max-w-xs transform bg-white p-4 pb-8 shadow-md transition-transform duration-300 lg:sticky
-			 lg:top-20 lg:z-0 lg:max-h-screen lg:rounded
+			 lg:top-20 lg:z-0 lg:max-h-screen lg:rounded-sm
 			{isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0"
 			aria-modal="true"
 			role="dialog"
@@ -140,7 +142,7 @@
 		>
 			<!-- Close button for mobile -->
 			<button
-				class="absolute right-2 top-2 rounded-full bg-gray-200 p-2 lg:hidden"
+				class="absolute top-2 right-2 rounded-full bg-gray-200 p-2 lg:hidden"
 				onclick={closeSidebar}
 			>
 				<Icon icon="line-md:close-small" width="24" height="24" />
@@ -174,7 +176,7 @@
 	<!-- Mobile overlay to close sidebar -->
 	{#if isOpen}
 		<button
-			class="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
+			class="fixed inset-0 z-10 bg-black/50 md:hidden"
 			aria-label="Close sidebar"
 			onclick={closeSidebar}
 		></button>
@@ -193,7 +195,7 @@
 			</div>
 		</div>
 
-		<div class="grid gap-6 px-4 xl:grid-cols-2" aria-live="polite">
+		<div class="grid gap-6 px-4 lg:grid-cols-2" aria-live="polite">
 			{#if loading}
 				<SkeletonItem count={visibleItemsCount} variant="list" />
 			{:else}
@@ -203,7 +205,7 @@
 							href="/products/{product.id}"
 							title="Show '{product.title}' details"
 							aria-label="Show '{product.title}' details"
-							class="group block h-48 overflow-hidden shadow-sm"
+							class="group block h-48 overflow-hidden shadow-xs"
 						>
 							<img
 								src={product.thumbnail}
@@ -214,7 +216,7 @@
 						</a>
 						<div class="flex flex-col items-center gap-4 p-4">
 							<h2
-								class="hyphens-auto bg-gradient-to-r from-orange-600 to-sky-700 bg-clip-text text-center text-lg font-medium text-gray-600 text-transparent"
+								class="bg-linear-to-r from-orange-600 to-sky-700 bg-clip-text text-center text-lg font-medium hyphens-auto text-gray-600 text-transparent"
 							>
 								{product.title}
 							</h2>

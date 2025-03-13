@@ -58,7 +58,7 @@
 	<h4 class="mb-2 text-sm font-medium">{title}:</h4>
 	<!-- Dropdown toggle button -->
 	<button
-		class="flex w-full items-center justify-between rounded bg-gray-200 p-2"
+		class="flex w-full items-center justify-between rounded-sm bg-gray-200 p-2"
 		onclick={toggleDropdown}
 		aria-expanded={isOpen ? 'true' : 'false'}
 		aria-haspopup="listbox"
@@ -69,7 +69,7 @@
 	</button>
 
 	{#if isOpen}
-		<div class="absolute left-0 z-10 mt-1 w-full rounded bg-white shadow-lg">
+		<div class="absolute left-0 z-10 mt-1 w-full rounded-sm bg-white shadow-lg">
 			<!-- Clear selection button -->
 			<button
 				class="w-full rounded-t bg-sky-700 p-2 text-left text-sm text-white transition-all hover:bg-sky-800 hover:shadow-md focus:bg-sky-800"
@@ -96,7 +96,7 @@
 								<input
 									type="checkbox"
 									checked={selected.includes(value)}
-									class="rounded border-gray-300"
+									class="rounded-sm border-gray-300"
 									readonly
 								/>
 							</div>

@@ -14,7 +14,7 @@
 <label for="sort-options" class="text-sm font-medium">Sort by:</label>
 <select
 	id="sort-options"
-	class="cursor-pointer rounded bg-sky-700 p-2 text-white hover:bg-sky-800 focus:bg-sky-800"
+	class="cursor-pointer rounded-sm bg-sky-700 p-2 text-white hover:bg-sky-800 focus:bg-sky-800"
 	on:change={handleSortChange}
 	bind:value={sortOption}
 >
