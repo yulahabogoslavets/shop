@@ -17,7 +17,7 @@
 		<img
 			src={cartProduct.product.thumbnail}
 			alt="Product"
-			class="mr-4 size-12 rounded object-cover"
+			class="mr-4 size-12 rounded-sm object-cover"
 		/>
 		<div>
 			<p class="font-medium">{cartProduct.product.title}</p>
@@ -33,7 +33,7 @@
 					cartProduct.quantity--;
 				}
 			}}
-			class="disabled:opacity-500 group rounded p-1 hover:bg-gray-200 focus:bg-gray-200 disabled:cursor-not-allowed"
+			class="disabled:opacity-500 group rounded-sm p-1 hover:bg-gray-200 focus:bg-gray-200 disabled:cursor-not-allowed"
 			aria-label="Subtract 1 from quantity"
 		>
 			<Icon
@@ -47,7 +47,7 @@
 			{cartProduct.quantity}
 		</span>
 		<button
-			class="group rounded p-1 hover:bg-gray-200 focus:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+			class="group rounded-sm p-1 hover:bg-gray-200 focus:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
 			aria-label="Add 1 to quantity"
 			onclick={() => cartProduct.quantity++}
 			disabled={cartProduct.quantity >= stock}
@@ -61,7 +61,7 @@
 		</button>
 		<button
 			onclick={() => removeItem(cartProduct.id)}
-			class="group ml-4 rounded p-1 text-red-500 hover:bg-red-100 focus:bg-red-100"
+			class="group ml-4 rounded-sm p-1 text-red-500 hover:bg-red-100 focus:bg-red-100"
 		>
 			<Icon
 				icon="mdi-light:delete"

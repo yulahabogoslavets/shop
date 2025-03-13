@@ -52,7 +52,7 @@
 		<div class="text-center">
 			<button
 				on:click={loadMore}
-				class="rounded bg-sky-700 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-800"
+				class="rounded-sm bg-sky-700 px-4 py-2 text-white transition-colors duration-300 hover:bg-sky-800"
 			>
 				Load More
 			</button>

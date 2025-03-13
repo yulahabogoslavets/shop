@@ -7,7 +7,7 @@
 </script>
 
 <header class="sticky top-0 z-50 bg-orange-50 p-4 shadow-lg">
-	<div class="container mx-auto flex items-center justify-between gap-2">
+	<div class="container mx-auto flex w-[85cqw] items-center justify-between gap-2">
 		<a href="/" title="Start page" aria-label="Start page" class="group">
 			<Icon
 				icon="mdi-light:home"
